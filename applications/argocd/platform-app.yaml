@@ -18,9 +18,9 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/caslulucas/CodeFase3TC-GitOps.git
+    repoURL: https://github.com/caslulucas/TC_Fase4_GitOps.git
     targetRevision: main
-    path: platform
+    path: applications/platform
 
   destination:
     server: https://kubernetes.default.svc
