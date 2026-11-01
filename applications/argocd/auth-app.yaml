@@ -21,7 +21,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
-
-  syncOptions:
-  # Cria o namespace auth automaticamente caso não exista
-  - CreateNamespace=true
+    syncOptions:
+    # Cria o namespace auth automaticamente caso não exista
+      - CreateNamespace=true
