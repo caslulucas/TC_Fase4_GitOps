@@ -50,8 +50,8 @@ spec:
 
           extraVolumeMounts:
             - name: loki-storage
-              mountPath: /loki
-              
+              mountPath: /var/loki
+
         backend:
           replicas: 0
 
