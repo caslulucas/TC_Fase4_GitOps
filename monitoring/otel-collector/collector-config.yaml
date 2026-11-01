@@ -19,6 +19,10 @@ exporters:
   debug:
     verbosity: basic
 
+  otlphttp/loki:
+    endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
+  
+
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
@@ -62,3 +66,4 @@ service:
 
       exporters:
         - debug
+        - otlphttp/loki
