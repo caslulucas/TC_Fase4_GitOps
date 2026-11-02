@@ -34,8 +34,28 @@ config:
       endpoint: https://otlp.nr-data.net
       headers:
           api-key: ${env:NEW_RELIC_LICENSE_KEY}
-    
 
+    prometheus:
+      endpoint: 0.0.0.0:8889      
+    
+  connectors:
+    span_metrics:
+      histogram:
+        explicit:
+          buckets:
+            - 5ms
+            - 10ms
+            - 25ms
+            - 50ms
+            - 100ms
+            - 250ms
+            - 500ms
+            - 1s
+            - 2.5s
+            - 5s
+      dimensions:
+        - name: http.request.method
+        - name: http.response.status_code
 
   extensions:
     health_check:
@@ -56,6 +76,7 @@ config:
         exporters:
           - debug
           - otlphttp/newrelic
+          - span_metrics
 
       metrics:
         receivers:
@@ -65,6 +86,15 @@ config:
           - batch
         exporters:
           - debug
+
+      metrics/spanmetrics:
+        receivers:
+          - span_metrics
+        processors:
+          - batch
+        exporters:
+          - prometheus
+
 
       logs:
         receivers:
@@ -102,3 +132,9 @@ ports:
 
   zipkin:
     enabled: false
+  
+  spanmetrics:
+    enabled: true
+    containerPort: 8889
+    servicePort: 8889
+    protocol: TCP
