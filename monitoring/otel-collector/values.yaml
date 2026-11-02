@@ -30,6 +30,12 @@ config:
     otlphttp/loki:
       endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
 
+    otlphttp/newrelic:
+      endpoint: https://otlp.nr-data.net
+      headers:
+          api-key: ${env:NEW_RELIC_LICENSE_KEY}
+    
+
 
   extensions:
     health_check:
@@ -49,6 +55,7 @@ config:
           - batch
         exporters:
           - debug
+          - otlphttp/newrelic
 
       metrics:
         receivers:
@@ -68,6 +75,14 @@ config:
         exporters:
           - debug
           - otlphttp/loki
+          
+
+extraEnvs:
+  - name: NEW_RELIC_LICENSE_KEY
+    valueFrom:
+      secretKeyRef:
+        name: newrelic-otlp
+        key: license-key
 
 ports:
   otlp:
