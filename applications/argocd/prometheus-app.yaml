@@ -23,6 +23,13 @@ spec:
           prometheusSpec:
             retention: 2d
 
+            additionalScrapeConfigs:
+              - job_name: otel-span-metrics
+                scrape_interval: 15s
+                static_configs:
+                  - targets:
+                      - otel-collector-opentelemetry-collector.monitoring.svc.cluster.local:8889
+
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
