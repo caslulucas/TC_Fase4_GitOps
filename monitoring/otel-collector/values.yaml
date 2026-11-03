@@ -25,7 +25,7 @@ config:
 
   exporters:
     debug:
-      verbosity: detailed
+      verbosity: basic
 
     otlphttp/loki:
       endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
@@ -103,7 +103,6 @@ config:
           - memory_limiter
           - batch
         exporters:
-          - debug
           - otlphttp/loki
           
 

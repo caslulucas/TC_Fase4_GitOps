@@ -17,7 +17,7 @@ processors:
 
 exporters:
   debug:
-    verbosity: detailed
+    verbosity: basic
 
   otlphttp/loki:
     endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
@@ -102,5 +102,4 @@ service:
         - batch
 
       exporters:
-        - debug
         - otlphttp/loki
