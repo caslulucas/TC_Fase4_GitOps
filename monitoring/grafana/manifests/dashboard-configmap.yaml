@@ -138,7 +138,7 @@ data:
           },
           "targets": [
             {
-              "expr": "{k8s_namespace_name=~\"argocd|monitoring\"}",
+              "expr": "{k8s_namespace_name=\"monitoring\", k8s_container_name!=\"loki-canary\"}",
               "refId": "A"
             }
           ],
