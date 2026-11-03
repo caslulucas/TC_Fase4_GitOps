@@ -1,0 +1,57 @@
+mode: daemonset
+
+image:
+  repository: otel/opentelemetry-collector-contrib
+
+  
+presets:
+  logsCollection:
+    enabled: true
+    includeCollectorLogs: false
+    storeCheckpoints: false
+
+  kubernetesAttributes:
+    enabled: true
+
+config:
+  processors:
+    memory_limiter:
+      check_interval: 5s
+      limit_percentage: 80
+      spike_limit_percentage: 25
+
+    batch: {}
+
+  exporters:
+    otlphttp/gateway:
+      endpoint: http://otel-collector-opentelemetry-collector.monitoring.svc.cluster.local:4318
+
+  service:
+    pipelines:
+      logs:
+        processors:
+          - memory_limiter
+          - k8sattributes
+          - batch
+
+        exporters:
+          - otlphttp/gateway
+
+ports:
+  otlp:
+    enabled: false
+
+  otlp-http:
+    enabled: false
+
+  jaeger-compact:
+    enabled: false
+
+  jaeger-thrift:
+    enabled: false
+
+  jaeger-grpc:
+    enabled: false
+
+  zipkin:
+    enabled: false
