@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: self-healing
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/caslulucas/TC_Fase4_GitOps.git
+    targetRevision: main
+    path: monitoring/self-healing
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

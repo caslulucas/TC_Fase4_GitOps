@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: togglemaster-self-healing
+  namespace: monitoring
+
+rules:
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    resourceNames:
+      - grafana
+    verbs:
+      - get
+      - patch

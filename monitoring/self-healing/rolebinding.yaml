@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: togglemaster-self-healing
+  namespace: monitoring
+
+subjects:
+  - kind: ServiceAccount
+    name: togglemaster-self-healing
+    namespace: monitoring
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: togglemaster-self-healing

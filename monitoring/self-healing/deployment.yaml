@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: togglemaster-self-healing
+  namespace: monitoring
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: togglemaster-self-healing
+
+  template:
+    metadata:
+      labels:
+        app: togglemaster-self-healing
+
+    spec:
+      serviceAccountName: togglemaster-self-healing
+
+      containers:
+        - name: self-healing
+          image: togglemaster-self-healing:local
+          imagePullPolicy: Never
+
+          ports:
+            - name: http
+              containerPort: 8080
+
+          env:
+            - name: TARGET_NAMESPACE
+              value: monitoring
+
+            - name: TARGET_DEPLOYMENT
+              value: grafana
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20

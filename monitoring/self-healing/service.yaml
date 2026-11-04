@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: togglemaster-self-healing
+  namespace: monitoring
+
+spec:
+  type: ClusterIP
+
+  selector:
+    app: togglemaster-self-healing
+
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
