@@ -76,6 +76,13 @@ spec:
                         url: ${DISCORD_WEBHOOK_URL}
                         use_discord_username: true
 
+                    - uid: togglemaster-self-healing
+                      type: webhook
+                      disableResolveMessage: true
+                      settings:
+                        httpMethod: POST
+                        url: http://togglemaster-self-healing.monitoring.svc.cluster.local:8080/heal
+
 
             policies.yaml:
               apiVersion: 1
