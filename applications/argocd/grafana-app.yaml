@@ -28,6 +28,7 @@ spec:
               apiVersion: 1
               datasources:
                 - name: Prometheus
+                  uid: Prometheus
                   type: prometheus
                   access: proxy
                   url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
@@ -35,6 +36,7 @@ spec:
                   editable: true
 
                 - name: Loki
+                  uid: Loki
                   type: loki
                   access: proxy
                   url: http://loki.monitoring.svc.cluster.local:3100
