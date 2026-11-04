@@ -73,10 +73,6 @@ spec:
                       settings:
                         url: ${DISCORD_WEBHOOK_URL}
                         use_discord_username: true
-                        message: |
-                          {{ template "default.message" . }}
-                        title: |
-                          ToggleMaster Alert - {{ .Status }}
 
                     - uid: togglemaster-self-healing
                       type: webhook
