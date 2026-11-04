@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: togglemaster-self-healing
   namespace: monitoring
@@ -21,12 +22,14 @@ spec:
 
       containers:
         - name: self-healing
+
           image: togglemaster-self-healing:local
           imagePullPolicy: Never
 
           ports:
             - name: http
               containerPort: 8080
+              protocol: TCP
 
           env:
             - name: TARGET_NAMESPACE
@@ -35,10 +38,14 @@ spec:
             - name: TARGET_DEPLOYMENT
               value: grafana
 
+            - name: COOLDOWN_SECONDS
+              value: "600"
+
           readinessProbe:
             httpGet:
               path: /health
               port: http
+
             initialDelaySeconds: 3
             periodSeconds: 10
 
@@ -46,5 +53,6 @@ spec:
             httpGet:
               path: /health
               port: http
+
             initialDelaySeconds: 10
             periodSeconds: 20
