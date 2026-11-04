@@ -41,6 +41,164 @@ spec:
                   isDefault: false
                   editable: true
 
+          envValueFrom:
+            PD_ROUTING_KEY:
+              secretKeyRef:
+                name: pagerduty-integration
+                key: routing-key
+
+            DISCORD_WEBHOOK_URL:
+              secretKeyRef:
+                name: discord-webhook
+                key: webhook-url
+
+          alerting:
+            contactpoints.yaml:
+              apiVersion: 1
+
+              contactPoints:
+                - orgId: 1
+                  name: ToggleMaster Incident
+                  receivers:
+                    - uid: togglemaster-pagerduty
+                      type: pagerduty
+                      disableResolveMessage: false
+                      settings:
+                        integrationKey: ${PD_ROUTING_KEY}
+                        severity: critical
+
+                    - uid: togglemaster-discord
+                      type: discord
+                      disableResolveMessage: false
+                      settings:
+                        url: ${DISCORD_WEBHOOK_URL}
+                        use_discord_username: true
+                        message: |
+                          {{ template "default.message" . }}
+                        title: |
+                          ToggleMaster Alert - {{ .Status }}
+
+                    - uid: togglemaster-self-healing
+                      type: webhook
+                      disableResolveMessage: true
+                      settings:
+                        url: http://togglemaster-self-healing.monitoring.svc.cluster.local:8080/heal
+                        httpMethod: POST
+
+            policies.yaml:
+              apiVersion: 1
+
+              policies:
+                - orgId: 1
+                  receiver: grafana-default-email
+                  group_by:
+                    - grafana_folder
+                    - alertname
+                  group_wait: 30s
+                  group_interval: 5m
+                  repeat_interval: 4h
+                  routes:
+                    - receiver: ToggleMaster Incident
+                      object_matchers:
+                        - - service
+                          - =
+                          - togglemaster
+                      group_wait: 10s
+                      group_interval: 1m
+                      repeat_interval: 4h
+
+            rules.yaml:
+              apiVersion: 1
+
+              groups:
+                - orgId: 1
+                  name: togglemaster
+                  folder: togglemaster
+                  interval: 1m
+
+                  rules:
+                    - uid: togglemaster-high-cluster-cpu
+                      title: ToggleMaster - High Cluster CPU
+                      condition: C
+
+                      data:
+                        - refId: A
+                          datasourceUid: Prometheus
+                          relativeTimeRange:
+                            from: 600
+                            to: 0
+                          model:
+                            datasource:
+                              type: prometheus
+                              uid: Prometheus
+                            editorMode: code
+                            expr: |
+                              100 - (
+                                avg(
+                                  rate(node_cpu_seconds_total{mode="idle"}[1m])
+                                ) * 100
+                              )
+                            instant: true
+                            intervalMs: 1000
+                            legendFormat: __auto
+                            maxDataPoints: 43200
+                            range: false
+                            refId: A
+
+                        - refId: B
+                          datasourceUid: __expr__
+                          relativeTimeRange:
+                            from: 0
+                            to: 0
+                          model:
+                            datasource:
+                              type: __expr__
+                              uid: __expr__
+                            expression: A
+                            reducer: last
+                            type: reduce
+                            refId: B
+
+                        - refId: C
+                          datasourceUid: __expr__
+                          relativeTimeRange:
+                            from: 0
+                            to: 0
+                          model:
+                            datasource:
+                              type: __expr__
+                              uid: __expr__
+                            expression: B
+                            type: threshold
+                            conditions:
+                              - evaluator:
+                                  params:
+                                    - 10
+                                  type: gt
+                                operator:
+                                  type: and
+                                query:
+                                  params:
+                                    - C
+                                reducer:
+                                  params: []
+                                  type: last
+                                type: query
+                            refId: C
+
+                      noDataState: NoData
+                      execErrState: Error
+                      for: 1m
+
+                      annotations:
+                        summary: ToggleMaster high CPU detected
+                        description: Cluster CPU usage exceeded the configured threshold.
+
+                      labels:
+                        severity: critical
+                        service: togglemaster
+                        environment: local        
+
           dashboardProviders:
             dashboardproviders.yaml:
               apiVersion: 1
