@@ -153,7 +153,7 @@ spec:
                             conditions:
                               - evaluator:
                                   params:
-                                    - 90
+                                    - 5
                                   type: gt
                                 operator:
                                   type: and
@@ -174,7 +174,7 @@ spec:
 
                       noDataState: NoData
                       execErrState: Error
-                      for: 5m
+                      for: 1m
 
                       annotations:
                         summary: ToggleMaster high CPU detected
