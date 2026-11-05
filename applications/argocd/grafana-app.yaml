@@ -118,7 +118,7 @@ spec:
                   rules:
                     - uid: togglemaster-high-cluster-cpu
                       title: ToggleMaster - High Cluster CPU
-                      condition: C
+                      condition: B
 
                       data:
                         - refId: A
