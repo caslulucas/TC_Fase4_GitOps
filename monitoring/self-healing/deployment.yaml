@@ -23,8 +23,8 @@ spec:
       containers:
         - name: self-healing
 
-          image: togglemaster-self-healing:local
-          imagePullPolicy: Never
+          image: 767397858387.dkr.ecr.us-east-1.amazonaws.com/togglemaster-self-healing:fase4
+          imagePullPolicy: IfNotPresent
 
           ports:
             - name: http
