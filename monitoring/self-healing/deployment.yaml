@@ -33,10 +33,10 @@ spec:
 
           env:
             - name: TARGET_NAMESPACE
-              value: monitoring
+              value: evaluation
 
             - name: TARGET_DEPLOYMENT
-              value: grafana
+              value: evaluation-deployment
 
             - name: COOLDOWN_SECONDS
               value: "600"
