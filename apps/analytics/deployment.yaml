@@ -21,11 +21,11 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8005
-          # envFrom:
-          #   - configMapRef:
-          #       name: analytics-configmap
-          #   - secretRef:
-          #       name: analytics-secret
+          envFrom:
+            - configMapRef:
+                name: analytics-configmap
+            - secretRef:
+                name: analytics-secret
           resources:
             requests:
               cpu: "200m"

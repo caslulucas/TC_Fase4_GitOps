@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flag-configmap
+  namespace: flag
+data:
+  PORT: "8002"
+  AUTH_SERVICE_URL: "http://auth-service.auth.svc.cluster.local:8001"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector-opentelemetry-collector.monitoring.svc.cluster.local:4318"
+  DEPLOYMENT_ENVIRONMENT: "academy"
