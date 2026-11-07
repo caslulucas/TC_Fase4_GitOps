@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: targeting-service
-          image: 045451774875.dkr.ecr.us-east-1.amazonaws.com/togglemaster-targeting
+          image: 767397858387.dkr.ecr.us-east-1.amazonaws.com/togglemaster-targeting:fase4
           imagePullPolicy: Always
           ports:
             - containerPort: 8003
@@ -34,7 +34,7 @@ spec:
               cpu: "300m"
               memory: "256Mi"
 
-          
+
           #readinessProbe:
             #httpGet:
               #path: /health

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: flag-service
-          image: 045451774875.dkr.ecr.us-east-1.amazonaws.com/togglemaster-flag
+          image: 767397858387.dkr.ecr.us-east-1.amazonaws.com/togglemaster-flag:fase4
           imagePullPolicy: Always
           ports:
             - containerPort: 8002
@@ -45,5 +45,5 @@ spec:
               #path: /health
              # port: 8002
             #initialDelaySeconds: 20
-           # periodSeconds: 15 
-          
+           # periodSeconds: 15
+
